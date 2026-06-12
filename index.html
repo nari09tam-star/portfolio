@@ -1,0 +1,1678 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>narimane be</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #c026d3;
+            --primary-dark: #a21caf;
+            --primary-light: #e879f9;
+            --primary-glow: rgba(192, 38, 211, 0.3);
+            --secondary: #7c3aed;
+            --accent: #f472b6;
+            --dark: #0f0518;
+            --darker: #080210;
+            --card: #1a0b2e;
+            --card-hover: #251240;
+            --text: #f3e8ff;
+            --text-muted: #c4b5fd;
+            --text-dim: #8b5cf6;
+            --gradient-1: linear-gradient(135deg, #c026d3 0%, #7c3aed 50%, #f472b6 100%);
+            --gradient-2: linear-gradient(45deg, #a21caf, #7c3aed);
+            --gradient-hero: linear-gradient(135deg, rgba(192,38,211,0.15) 0%, rgba(124,58,237,0.1) 50%, rgba(15,5,24,0.9) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px var(--primary-glow); }
+            50% { box-shadow: 0 0 40px var(--primary-glow), 0 0 60px rgba(192,38,211,0.1); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes blob {
+            0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+            50% { border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; }
+            75% { border-radius: 60% 40% 60% 30% / 70% 30% 50% 60%; }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(0px);
+        }
+        .navbar.scrolled {
+            background: rgba(8, 2, 16, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 0.8rem 5%;
+            box-shadow: 0 4px 30px rgba(192, 38, 211, 0.1);
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo i {
+            font-size: 1.5rem;
+            -webkit-text-fill-color: var(--primary);
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--text);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-cta {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(192, 38, 211, 0.3);
+        }
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(192, 38, 211, 0.5);
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 8rem 5% 4rem;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-hero);
+        }
+        .hero-blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: var(--gradient-1);
+            opacity: 0.1;
+            filter: blur(80px);
+            animation: blob 15s ease-in-out infinite;
+        }
+        .hero-blob:nth-child(2) {
+            top: -10%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+        .hero-blob:nth-child(3) {
+            bottom: -10%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            animation-delay: -10s;
+        }
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 900px;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(192, 38, 211, 0.15);
+            border: 1px solid rgba(192, 38, 211, 0.3);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(192, 38, 211, 0.4);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(192, 38, 211, 0.6);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid rgba(192, 38, 211, 0.5);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-secondary:hover {
+            background: rgba(192, 38, 211, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 5%;
+            position: relative;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .section-tag {
+            display: inline-block;
+            background: rgba(192, 38, 211, 0.15);
+            color: var(--primary-light);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(192, 38, 211, 0.2);
+        }
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .section-title span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section-desc {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Portfolio Section */
+        .portfolio {
+            background: var(--dark);
+        }
+        .portfolio-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid rgba(192, 38, 211, 0.3);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--gradient-1);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(192, 38, 211, 0.3);
+        }
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .portfolio-item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            cursor: pointer;
+            group: portfolio-item;
+        }
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .portfolio-item:hover img {
+            transform: scale(1.1);
+        }
+        .portfolio-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(15,5,24,0.95) 0%, rgba(15,5,24,0.3) 50%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+        .portfolio-category {
+            color: var(--primary-light);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .portfolio-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .portfolio-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: gap 0.3s;
+        }
+        .portfolio-btn:hover {
+            gap: 1rem;
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .service-card {
+            background: var(--card);
+            border: 1px solid rgba(192, 38, 211, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(192, 38, 211, 0.4);
+            box-shadow: 0 20px 60px rgba(192, 38, 211, 0.15);
+        }
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 25px rgba(192, 38, 211, 0.3);
+        }
+        .service-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .service-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        .service-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .service-price span {
+            font-size: 0.9rem;
+            -webkit-text-fill-color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Booking Section */
+        .booking {
+            background: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+        .booking::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            opacity: 0.05;
+            filter: blur(100px);
+            border-radius: 50%;
+        }
+        .booking-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .booking-info h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .booking-info h2 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .booking-info p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        .booking-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .booking-feature {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .booking-feature i {
+            width: 40px;
+            height: 40px;
+            background: rgba(192, 38, 211, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-light);
+        }
+        .booking-form {
+            background: var(--card);
+            border: 1px solid rgba(192, 38, 211, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: var(--darker);
+            border: 1px solid rgba(192, 38, 211, 0.2);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(192, 38, 211, 0.1);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .submit-btn {
+            width: 100%;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(192, 38, 211, 0.4);
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(192, 38, 211, 0.6);
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        .testimonial-card {
+            background: var(--card);
+            border: 1px solid rgba(192, 38, 211, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+        }
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.2;
+            font-family: serif;
+            line-height: 1;
+        }
+        .testimonial-text {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+        .testimonial-name {
+            font-weight: 700;
+        }
+        .testimonial-role {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .stars {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            border-top: 1px solid rgba(192, 38, 211, 0.1);
+            padding: 4rem 5% 2rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+        }
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--card);
+            border: 1px solid rgba(192, 38, 211, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .footer-social a:hover {
+            background: var(--gradient-1);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-3px);
+        }
+        .footer-links h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+        .footer-links ul {
+            list-style: none;
+        }
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(192, 38, 211, 0.1);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 2, 16, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Success Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 2, 16, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: var(--card);
+            border: 1px solid rgba(192, 38, 211, 0.3);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            animation: scaleIn 0.4s ease;
+        }
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+        .modal h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .modal p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        .modal-btn {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(192, 38, 211, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .booking-container {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .hero-stats {
+                gap: 2rem;
+            }
+            .stat-number {
+                font-size: 1.8rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-social {
+                justify-content: center;
+            }
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background: var(--card);
+            z-index: 1500;
+            padding: 6rem 2rem 2rem;
+            transition: right 0.4s ease;
+            border-left: 1px solid rgba(192, 38, 211, 0.2);
+        }
+        .mobile-menu.active {
+            right: 0;
+        }
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 2, 16, 0.8);
+            z-index: 1400;
+        }
+        .mobile-menu-overlay.active {
+            display: block;
+        }
+        .mobile-menu a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            padding: 1rem 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(192, 38, 211, 0.1);
+        }
+        .mobile-menu a:hover {
+            color: var(--primary-light);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="logo">
+            <i class="fas fa-camera-retro"></i>
+           Narimane be        </div>
+        <ul class="nav-links">
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#portfolio">أعمالي</a></li>
+            <li><a href="#services">الخدمات</a></li>
+            <li><a href="#booking">احجز موعد</a></li>
+            <li><a href="#testimonials">آراء العملاء</a></li>
+            <li><a href="c:\Users\hg\OneDrive\my project\WhatsApp Image 2026-06-12 at 1.36.47 AM.jpeg">شروط العمل</a></li>
+        </ul>
+        <button class="nav-cta" onclick="scrollToSection('booking')">احجز جلسة الآن</button>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#home" onclick="toggleMobileMenu()">الرئيسية</a>
+        <a href="#portfolio" onclick="toggleMobileMenu()">أعمالي</a>
+        <a href="#services" onclick="toggleMobileMenu()">الخدمات</a>
+        <a href="#booking" onclick="toggleMobileMenu()">احجز موعد</a>
+        <a href="#testimonials" onclick="toggleMobileMenu()">آراء العملاء</a>
+        <a href="#conditions" onclick="toggleMobileMenu()">شروط العمل</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-blob"></div>
+        <div class="hero-blob"></div>
+        <div class="hero-blob"></div>
+        
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-star"></i>
+                مصورة بخبرة 5 سنوات
+            </div>
+            <h1>
+                ألتقط لحظاتك<br>
+                <span>الفريدة</span> بأجمل صورة
+            </h1>
+            <p>
+                أؤمن بأن كل لحظة تستحق أن تُخلد. أقدم لك تجربة تصوير احترافية تجمع بين الإبداع والاحترافية لإبراز جمالك في كل صورة.
+            </p>
+            <div class="hero-buttons">
+                <a href="#portfolio" class="btn-primary">
+                    <i class="c:\Users\hg\OneDrive\my project\WhatsApp Image 2026-06-12 at 1.36.47 AM.jpeg"></i>
+                    شاهد أعمالي
+                </a>
+                <a href="#booking" class="btn-secondary">
+                    <i class="fas fa-calendar-alt"></i>
+                    احجز موعدك
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">+50</div>
+                    <div class="stat-label">جلسة تصوير</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">+50</div>
+                    <div class="stat-label">عميل سعيد</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">سنوات خبرة</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="portfolio" id="portfolio">
+        <div class="section-header animate-on-scroll">
+            <div class="section-tag">معرض الأعمال</div>
+            <h2 class="section-title">أعمالي <span>الفوتوغرافية</span></h2>
+            <p class="section-desc">مجموعة مختارة من أبرز أعمالي في مختلف مجالات التصوير</p>
+        </div>
+        
+        <div class="portfolio-filter animate-on-scroll">
+            <button class="filter-btn active" data-filter="all">الكل</button>
+            <button class="filter-btn" data-filter="portrait">جلسة تصوير التخرجات</button>
+            <button class="filter-btn" data-filter="wedding">الاعراس</button>
+            <button class="filter-btn" data-filter="fashion">خطوبة</button>
+            <button class="filter-btn" data-filter="product">جلسات عادية خاريجية</button>
+            <button class="filter-btn" data-filter="event">مناسبات احرى ...</button>
+        </div>
+        
+        <div class="portfolio-grid">
+            <div class="portfolio-item animate-on-scroll" data-category="portrait" onclick="openLightbox(this)">
+                <img src="c:\Users\hg\OneDrive\my project\IMG_1827.JPG.jpeg" alt="جلسة تصوير التخرجات">
+                <div class="portfolio-overlay">
+                    <div class="portfolio-category">جلسة تصوير التخرجات</div>
+                    <div class="portfolio-titlle">جمال </div>
+                    <a href="#" class="portfolio-btn">
+                        عرض الصورة <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="portfolio-item animate-on-scroll" data-category="wedding" onclick="openLightbox(this)">
+                <img src="c:\Users\hg\OneDrive\my project\WhatsApp Image 2026-06-12 at 2.08.12 AM.jpeg" alt="الاعراس">
+                <div class="portfolio-overlay">
+                    <div class="portfolio-category">الاعراس</div>
+                    <div class="portfolio-title">يوم العمر</div>
+                    <a href="#" class="portfolio-btn">
+                        عرض الصورة <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="portfolio-item animate-on-scroll" data-category="fashion" onclick="openLightbox(this)">
+                <img src="c:\Users\hg\OneDrive\my project\WhatsApp Image 2026-06-12 at 2.08.21 AM (1).jpeg" alt="خطوبة">
+                <div class="portfolio-overlay">
+                    <div class="portfolio-category">خطوبة</div>
+                    <div class="portfolio-title">حب </div>
+                    <a href="#" class="portfolio-btn">
+                        عرض الصورة <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="portfolio-item animate-on-scroll" data-category="portrait" onclick="openLightbox(this)">
+                <img src="c:\Users\hg\OneDrive\my project\IMG_1825.JPG.jpeg" alt="جلسات عادية خاريجية">
+                <div class="portfolio-overlay">
+                    <div class="portfolio-category">التفاصيل</div>
+                    <div class="portfolio-title">نظرة عميقة</div>
+                    <a href="#" class="portfolio-btn">
+                        عرض الصورة <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+           <div class="portfolio-item animate-on-scroll" data-category="product" onclick="openLightbox(this)">
+                <img src="c:\Users\hg\OneDrive\my project\WhatsApp Image 2026-06-12 at 2.16.02 AM (1).jpeg" alt="مناسبات اخرى >
+                <div class="portfolio-overlay">
+                    <div class="portfolio-category">منتديات</div>
+                    <div class="portfolio-title">تفاصيل المنتدى</div>
+                    <a href="#" class="portfolio-btn">
+                        عرض الصورة <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="portfolio-item animate-on-scroll" data-category="wedding" onclick="openLightbox(this)">
+                <img src="c:\Users\hg\OneDrive\my project\WhatsApp Image 2026-06-12 at 2.08.11 AM.jpeg" alt="الاعراس">
+                <div class="portfolio-overlay">
+                    <div class="portfolio-category">الاعراس</div>
+                    <div class="portfolio-title">فرحة الأبد</div>
+                    <a href="#" class="portfolio-btn">
+                        عرض الصورة <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="portfolio-item animate-on-scroll" data-category="fashion" onclick="openLightbox(this)">
+                <img src="c:\Users\hg\OneDrive\my project\خطبة.jpeg" alt="خطوبة">
+                <div class="portfolio-overlay">
+                    <div class="portfolio-category">خطوبة</div>
+                    <div class="portfolio-title">الحب</div>
+                    <a href="#" class="portfolio-btn">
+                        عرض الصورة <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="portfolio-item animate-on-scroll" data-category="product" onclick="openLightbox(this)">
+                <img src="c:\Users\hg\OneDrive\my project\WhatsApp Image 2026-06-12 at 2.16.02 AM (1).jpeg" alt="جلسات خاريجية عادية">
+                <div class="portfolio-overlay">
+                    <div class="portfolio-category">جلسات خاريجية عادية</div>
+                    <div class="portfolio-title">لقطة جميلة</div>
+                    <a href="#" class="portfolio-btn">
+                        عرض الصورة <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header animate-on-scroll">
+            <div class="section-tag">الخدمات</div>
+            <h2 class="section-title">خدمات <span>التصوير</span></h2>
+            <p class="section-desc">باقات متنوعة تناسب جميع احتياجاتك بأعلى معايير الجودة</p>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card animate-on-scroll">
+                <div class="service-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h3>جلسة التخرجات</h3>
+                <p>نوفر جلسات تصوير للخريجين بجودة احترافية ولمسات إبداعية مميزة، مع عروض خاصة وخدمات متنوعة تناسب جميع الاحتياجات.
+
+ملاحظة: خدمة تصوير جلسات المناقشة غير متوفرة حاليًا.
+</p>
+                <div class="service-price">6000دج<span>/ بداية من</span></div>
+            </div>
+            
+            <div class="service-card animate-on-scroll">
+                <div class="service-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>تصوير الاعراس</h3>
+                <p>تغطية كاملة ليوم زفافك بأسلوب فني مميز، من التحضيرات حتى الحفل، مع ألبوم رقمي وطباعي فاخر.</p>
+                <div class="service-price">6000دج<span>/ بداية من</span></div>
+            </div>
+            
+            <div class="service-card animate-on-scroll">
+                <div class="service-icon">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <h3>تصوير خطوبات</h3>
+                <p>نقدّم لكِ جلسة تصوير خطوبة مميزة تجمع بين الأناقة والرومانسية، لتوثيق أجمل لحظاتك بأسلوب احترافي ولمسات إبداعية تجعل ذكرياتك تدوم مدى الحياة.</p>
+                <div class="service-price">130000.00دج<span>/ الجلسة</span></div>
+            </div>
+            
+            <div class="service-card animate-on-scroll">
+                <div class="service-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <h3>تصوير مناسبات اخرى</h3>
+                <p>يرجى ملئ المعلومات للتزويد بباقي المعلومات.</p>
+                <div class="service-price">8000دج<span>/ بداية من </span></div>
+            </div>
+            
+            <div class="service-card animate-on-scroll">
+                <div class="service-icon">
+                    <i class="fas fa-baby"></i>
+                </div>
+                <h3>جلسة عائلية</h3>
+                <p>تغطية المنتديات و الفعاليات الاجتماعية .</p>
+                <div class="service-price">9000دج <span>/ الجلسة</span></div>
+            </div>
+            
+            <div class="service-card animate-on-scroll">
+                <div class="service-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h3>تصوير تجاري</h3>
+                <p>تغطية احترافية للمحلات و اعلاناتكم التجارية، مع تسليم سريع ومعالجة احترافية للصور.</p>
+                <div class="service-price">10000.00دج<span>/ اليوم</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="booking" id="booking">
+        <div class="section-header animate-on-scroll">
+            <div class="section-tag">احجز موعدك</div>
+            <h2 class="section-title">احجز <span>جلسة تصوير</span></h2>
+            <p class="section-desc">املأ النموذج وسأتواصل معك لتأكيد الموعد</p>
+        </div>
+        
+        <div class="booking-container">
+            <div class="booking-info animate-on-scroll">
+                <h2>لنبدأ <span>رحلتنا</span> معاً</h2>
+                <p>بعض الحقول لا يوجد بها اسعار و ذلك بسبب اختلاف طبيعة العمل من مناسبة لاخرى قم بملئ معلوماتك و سيتم التواصل معك خلال 24 ساعة للاطلاع على باقي المعلومات و شكرا لثقتكم بفريقي</p>
+                
+                <div class="booking-features">
+                    <div class="booking-feature">
+                        <i class="fas fa-check"></i>
+                        <span>استشارة مجانية قبل الجلسة</span>
+                    </div>
+                    <div class="booking-feature">
+                        <i class="fas fa-check"></i>
+                        <span>تسليم الصور خلال 7 أيام</span>
+                    </div>
+                    <div class="booking-feature">
+                        <i class="fas fa-check"></i>
+                        <span>معالجة احترافية لجميع الصور</span>
+                    </div>
+                    <div class="booking-feature">
+                        <i class="fas fa-check"></i>
+                        <span>حقوق كاملة للصور الرقمية</span>
+                    </div>
+                </div>
+            </div>
+            
+          <form class="booking-form animate-on-scroll" id="bookingForm" action="https://formspree.io/f/xjgdeola" method="POST">
+    <div class="form-row">
+        <div class="form-group">
+            <label>الاسم الكامل</label>
+            <input type="text" name="name" placeholder="أدخل اسمك" required>
+        </div>
+        <div class="form-group">
+            <label>رقم الهاتف</label>
+            <input type="tel" name="phone" placeholder="05xxxxxxxx" required>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>البريد الإلكتروني</label>
+        <input type="email" name="email" placeholder="your@email.com" required>
+    <div class="form-row">
+    <div class="form-group">
+        <label>نوع الجلسة</label>
+        <select name="session_type" id="sessionType" required>
+            <option value="">اختر نوع الجلسة</option>
+            <option value="portrait">جلسات تصوير التخرج</option>
+            <option value="wedding">الأعراس</option>
+            <option value="fashion">الخطوبة {130000.00دج}</option>
+            <option value="product">مناسبات أخرى</option>
+            <option value="commercial">تجاري</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>التاريخ المفضل</label>
+        <input type="date" name="date" required>
+    </div>
+</div>
+<!-- مكان المناسبة -->
+<div class="form-group">
+    <label>مكان المناسبة</label>
+    <input type="text" name="event_location" placeholder="أدخل مكان المناسبة (الولاية / القاعة / المنزل)" required>
+</div>
+
+<!-- باقات التخرج -->
+<div class="form-group" id="graduationPackages" style="display:none;">
+    <label>اختر باقة التخرج</label>
+    <select name="graduation_package">
+        <option value="">اختر الباقة</option>
+        <option value="basic">الباقة الاولى {15 صورة مع فيديو} {6000دج}</option>
+        <option value="premium">الباقة الثانية {20 صورة مع فيديو} {7000دج}</option>
+        <option value="vip">باقة الثالثة {30 صورة 2 فيديو} {8000دج}"</option>
+    </select>
+</div>
+
+<!-- باقات الأعراس (اختيارات متعددة) -->
+<div class="form-group" id="weddingPackages" style="display:none;">
+    <label>اختر باقات العرس (يمكن اختيار أكثر من خدمة)</label>
+
+    <div class="checkbox-group">
+         <div class="checkbox-row">
+
+        <label class="check-item">
+            <input type="checkbox" name="wedding_package[]" value="photo">
+           حنة العروس 130000.00دج
+        </label>
+
+        <label class="check-item">
+            <input type="checkbox" name="wedding_package[]" value="video">
+           تصديرة العروس ؛{سعر الروب الواحد6000دج}
+        </label>
+
+        <label class="check-item">
+            <input type="checkbox" name="wedding_package[]" value="album">
+           جلسة خاصة بالعرسان فقط {10000.00دج}
+        </label>
+
+        <label class="check-item">
+            <input type="checkbox" name="wedding_package[]" value="drone">
+           صباحية العروس{12000.00دج}
+        </label>
+        
+            <input type="checkbox" name="wedding_package[]" value="drone">
+           توديع العزوبية{12000.00دج}
+
+           
+           <label class="check-item">
+
+           </label>
+    </div>
+</div>
+</form>
+
+<!-- ===== JavaScript ===== -->
+<script>
+document.getElementById('sessionType').addEventListener('change', function() {
+
+    const graduationPackages = document.getElementById('graduationPackages');
+    const weddingPackages = document.getElementById('weddingPackages');
+
+    // إخفاء الكل
+    graduationPackages.style.display = 'none';
+    weddingPackages.style.display = 'none';
+
+    // إلغاء اختيارات الأعراس
+    document.querySelectorAll('input[name="wedding_package[]"]').forEach(el => {
+        el.checked = false;
+    });
+
+    // إلغاء اختيار التخرج
+    graduationPackages.querySelector("select").value = "";
+
+    // إظهار المناسب
+    if (this.value === 'portrait') {
+        graduationPackages.style.display = 'block';
+    }
+
+    if (this.value === 'wedding') {
+        weddingPackages.style.display = 'block';
+    }
+});
+</script>
+<script>
+document.getElementById('sessionType').addEventListener('change', function() {
+
+    const graduationPackages = document.getElementById('graduationPackages');
+    const weddingPackages = document.getElementById('weddingPackages');
+
+    // إخفاء الكل
+    graduationPackages.style.display = 'none';
+    weddingPackages.style.display = 'none';
+
+    // إزالة التحديد عند التغيير
+    document.querySelectorAll('input[name="wedding_package[]"]').forEach(el => {
+        el.checked = false;
+    });
+
+    const gradSelect = graduationPackages.querySelector("select");
+    gradSelect.value = "";
+
+    // إظهار المناسب
+    if (this.value === 'portrait') {
+        graduationPackages.style.display = 'block';
+    }
+
+    if (this.value === 'wedding') {
+        weddingPackages.style.display = 'block';
+    }
+});
+</script>
+
+
+
+<script>
+document.getElementById('sessionType').addEventListener('change', function() {
+    const packages = document.getElementById('graduationPackages');
+
+    if (this.value === 'portrait') {
+        packages.style.display = 'block';
+    } else {
+        packages.style.display = 'none';
+    }
+});
+</script>
+
+    <div class="form-group">
+        <label>التاريخ المفضل</label>
+        <input type="date" name="date" required>
+    </div>
+</div>
+    
+    <div class="form-group">
+        <label>ملاحظات إضافية</label>
+        <textarea name="notes" placeholder="أخبرني أكثر عن رؤيتك للجلسة..."></textarea>
+    </div>
+    
+       <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    تأكيد الحجز
+                </button>
+</form>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-header animate-on-scroll">
+            <div class="section-tag">آراء العملاء</div>
+            <h2 class="section-title">ماذا يقول <span>عملائي</span></h2>
+            <p class="section-desc">تجارب حقيقية من عملاء استمتعوا بتجربة التصوير</p>
+        </div>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card animate-on-scroll">
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">تصويرك ماشي غير تصاور …هذا فن وإحساس وابداع 🤍 حرفيا كل لقطة تخرج منك فيها ذوق عالي واحتراف يخلي أي حاجة عادية تولي لوحة برفكتت 🫶🏻 ربي يباركلك فرزقك ويكتب ليك التوفيق والخير فكل خطوة ويخليك دايما في تقدم ونجاح 💕 ولي ماتصور عندك تحشات ليه من تالي.</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">ن</div>
+                    <div>
+                        <div class="testimonial-name">الخريجة بشرى</div>
+                        <div class="testimonial-role">جلسة تصوير التخرج</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card animate-on-scroll">
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">أبصح الصور جاو أكثر من خيال! عجبوني بزاف وفاتو كامل توقعاتي. كل صورة فيها لمسة خاصة واحترافية تبهر، والنتيجة كانت روعة من جميع النواحي</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">س</div>
+                    <div>
+                        <div class="testimonial-name">العروس فرودس</div>
+                        <div class="testimonial-role">تصوير زفاف</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card animate-on-scroll">
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <p class="testimonial-text">بصراحة فرحت بزاف كي شفتهم، خدمة هايلة واهتمام بأدق التفاصيل. شكراً على الإبداع والمجهود، والله ذكريات تبقى العمر كامل. 🌹.</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">ف</div>
+                    <div>
+                        <div class="testimonial-name">العروس سلسبيل</div>
+                        <div class="testimonial-role">تصوير الاعراس</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <i class="fas fa-camera-retro"></i>
+                    narimane be
+                </div>
+                <p>ألتقط لحظاتك الفريدة بأجمل صورة. خبرة 5 سنوات في مجال التصوير الفوتوغرافي الاحترافي.</p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/narimane_b0e?igsh=NHU5bjBpaDFmMWRp"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.threads.com/@narimane_b0e"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.facebook.com/share/1CteXZbX1b/"><i class="fab fa-facebook"></i></a>
+                    <a href="https://wa.me/qr/ADWTLK5HMW47C1"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#portfolio">أعمالي</a></li>
+                    <li><a href="#services">الخدمات</a></li>
+                    <li><a href="#booking">احجز موعد</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>الخدمات</h4>
+                <ul>
+                    <li><a href="#">جلسات تصوير التخرجات</a></li>
+                    <li><a href="#">الاعراس</a></li>
+                    <li><a href="#">خطوبة</a></li>
+                    <li><a href="#">مناسبات اخرى ...</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>تواصل معي</h4>
+                <ul>
+                    <li><a href="mailto:hello@example.com">nari09tam@gmail.com</a></li>
+                    <li><a href="tel:+966501234567">+213658441209</a></li>
+                    <li><a href="#">الجزائر / تمنغست، </a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>جميع الحقوق محفوظة © 2026 | Narimane be</p>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close"><i class="fas fa-times"></i></button>
+        <img src="" alt="" id="lightboxImg">
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3>تم إرسال طلبك!</h3>
+            <p>سأتواصل معك خلال 24 ساعة لتأكيد الموعد والتفاصيل.</p>
+            <button class="modal-btn" onclick="closeModal()">حسناً</button>
+        </div>
+    </div>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+            document.getElementById('mobileOverlay').classList.toggle('active');
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Portfolio filter
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                document.querySelectorAll('.portfolio-item').forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 50);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Lightbox
+        function openLightbox(element) {
+            const img = element.querySelector('img');
+            document.getElementById('lightboxImg').src = img.src;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Booking form
+        function handleBooking(e) {
+            e.preventDefault();
+            document.getElementById('successModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            e.target.reset();
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on overlay click
+        document.getElementById('successModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('successModal')) {
+                closeModal();
+            }
+        });
+
+        // Close lightbox on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>'''
+
+
