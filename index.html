@@ -1191,7 +1191,7 @@
                 </div>
                 <h3>تصوير خطوبات</h3>
                 <p>نقدّم لكِ جلسة تصوير خطوبة مميزة تجمع بين الأناقة والرومانسية، لتوثيق أجمل لحظاتك بأسلوب احترافي ولمسات إبداعية تجعل ذكرياتك تدوم مدى الحياة.</p>
-                <div class="service-price">130000.00دج<span>/ الجلسة</span></div>
+                <div class="service-price">13000.00دج<span>/ الجلسة</span></div>
             </div>
             
             <div class="service-card animate-on-scroll">
@@ -1274,21 +1274,51 @@
     <div class="form-row">
     <div class="form-group">
         <label>نوع الجلسة</label>
-        <select name="session_type" id="sessionType" required>
+        <select name="session_type" id="session_type required>
             <option value="">اختر نوع الجلسة</option>
-            <option value="portrait">جلسات تصوير التخرج</option>
+            <option value="graduation_package">جلسات تصوير التخرج</option>
             <option value="wedding">الأعراس</option>
-            <option value="fashion">الخطوبة {130000.00دج}</option>
-            <option value="product">مناسبات أخرى</option>
-            <option value="commercial">تجاري</option>
+            <option value="engagement">الخطوبة {13000.00دج}</option>
+            <option value="others">مناسبات أخرى</option>
+            <option value="commerce">تجاري</option>
         </select>
     </div>
 
     <div class="form-group">
-        <label>التاريخ المفضل</label>
-        <input type="date" name="date" required>
-    </div>
+    <label>التاريخ </label>
+    <input type="date" name="date" id="appointment-date" onchange="validateDate()" required>
+    
+    <span id="date-message" style="display: block; margin-top: 5px; font-size: 14px; font-weight: bold;"></span>
 </div>
+
+<script>
+    // 1. ضع هنا التواريخ التي تم حجزها مسبقاً (صيغة: السنة-الشهر-اليوم)
+    const bookedDates = ["2026-06-15", "2026-06-16", "2026-06-20"];
+
+    // 2. كود لمنع اختيار تواريخ قديمة (يجعل الحد الأدنى للحجز هو اليوم تلقائياً)
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('appointment-date').setAttribute('min', today);
+
+    // 3. الدالة التي تفحص التاريخ المختار
+    function validateDate() {
+        const inputField = document.getElementById('appointment-date');
+        const messageSpan = document.getElementById('date-message');
+        const selectedDate = inputField.value;
+
+        // إذا اختار الزبون تاريخاً موجوداً في قائمة المحجوزين
+        if (bookedDates.includes(selectedDate)) {
+            messageSpan.innerHTML = "❌ هذا التاريخ محجوز مسبقاً، يرجى اختيار تاريخ آخر.";
+            messageSpan.style.color = "red";
+            inputField.value = ""; // مسح التاريخ لإجباره على اختيار يوم آخر
+        } else if (selectedDate === "") {
+            messageSpan.innerHTML = "";
+        } else {
+            // إذا كان التاريخ متاحاً
+            messageSpan.innerHTML = "✅ هذا التاريخ متاح للحجز!";
+            messageSpan.style.color = "green";
+        }
+    }
+</script>
 <!-- مكان المناسبة -->
 <div class="form-group">
     <label>مكان المناسبة</label>
@@ -1300,9 +1330,9 @@
     <label>اختر باقة التخرج</label>
     <select name="graduation_package">
         <option value="">اختر الباقة</option>
-        <option value="basic">الباقة الاولى {15 صورة مع فيديو} {6000دج}</option>
-        <option value="premium">الباقة الثانية {20 صورة مع فيديو} {7000دج}</option>
-        <option value="vip">باقة الثالثة {30 صورة 2 فيديو} {8000دج}"</option>
+        <option value="6000DA">الباقة الاولى {15 صورة مع فيديو} {6000دج}</option>
+        <option value="7000DA">الباقة الثانية {20 صورة مع فيديو} {7000دج}</option>
+        <option value="8000DA">باقة الثالثة {30 صورة 2 فيديو} {8000دج}"</option>
     </select>
 </div>
 
@@ -1315,7 +1345,7 @@
 
         <label class="check-item">
             <input type="checkbox" name="wedding_package[]" value="photo">
-           حنة العروس 130000.00دج
+           حنة العروس 13000.00دج
         </label>
 
         <label class="check-item">
